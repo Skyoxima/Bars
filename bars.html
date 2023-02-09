@@ -35,15 +35,20 @@
       </div>
       
       <div id="controlpanel" class="container">
-        <button id="addBarBtn">Add Bar</button>
+        <button id="add-bar-btn">Add Bar</button>
       </div>
     </section>
 
     <div class="blocker">
       <div class="pop-up">
         <p class="header">Add a Bar</p>
-        <div class="add-bar-txt"><label for="val">Value: </label><input type="text" name="val" id="new-bar-val" /></div>
+        <div class="pop-up-txt-input"><label for="sf">Label: </label><input type="text" name="sf" id="new-bar-label" /></div>
+        <div class="pop-up-sub-div">
+          <div class="pop-up-txt-input"><label for="val">Value: </label><input type="text" name="val" id="new-bar-val" /></div>
+          <div class="add-bar-color"><label for="barcolor">Pick Color: </label><input type="color" value="#ffc0cb" name="barcolor" id="bar-color-picker" /></div>
+        </div>
         <button id="pop-up-submit" disabled>Add!</button>
+        <button id="pop-up-cancel">Cancel</button>
       </div>
     </div>
     <script src="bars.js"></script>
