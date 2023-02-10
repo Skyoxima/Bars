@@ -2,7 +2,7 @@
   xTicks = document.querySelectorAll(".x-ticks");
 
   for(let i = 0; i < xTicks.length; i++) {
-    xTicks[i].style.left = `${1.75 + 9.5 * i}%`;
+    xTicks[i].style.left = `${1.75 + 9 * i}%`;
     xTicks[i].style.setProperty("--tick-text", `'${i}'`);
     if(i > 6)
       xTicks[i].style.setProperty("--tick-text-color", "green");
@@ -27,7 +27,6 @@ yAxisBarNums();
   const xPlaneDiv = document.querySelector('.bar-plane');
   const addBarBtn = document.getElementById('add-bar-btn');
   const blockerDiv = document.querySelector('.blocker');
-  const popUpDiv = document.querySelector('.pop-up');
   const newBarVal = document.getElementById("new-bar-val");
   const newBarLabel = document.getElementById("new-bar-label");
   const newBarColor = document.getElementById("bar-color-picker");
@@ -54,7 +53,8 @@ yAxisBarNums();
   popUpSubmitBtn.onclick = () => {
     bar = document.createElement('div');
     bar.className = 'bar';
-    bar.style.backgroundImage = "linear-gradient(to right, " + newBarColor.value + " 96%, transparent)";  // do NOT supply the ; in CSS
+    // bar.style.backgroundImage = "linear-gradient(to right, " + newBarColor.value + " 96%, transparent)";  // do NOT supply the ; in CSS
+    bar.style.background = newBarColor.value;
     bar.style.setProperty("--stands-for-text", `"${newBarLabel.value}"`);
     let iXTickPsn = xTicksSpans[parseInt(newBarVal.value)].getBoundingClientRect();
     bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`

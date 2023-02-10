@@ -27,7 +27,10 @@ header {
 }
 
 section {
-  display: flex; justify-content: space-evenly; align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
 }
 
 .container {
@@ -43,7 +46,7 @@ section {
 /*======================= The Main Panel =======================  */
 #main {
   position: relative;
-  width: 1100px; height: 700px;
+  width: 60%; height: 700px;
   /* mentioning height to be 700px is what enables me to handle the overflow, otherwise the div would've simply expanded */
   overflow: hidden;
   overflow-y: scroll;
@@ -98,7 +101,8 @@ section {
   margin-top: 25px;
   margin-bottom: 50px;
   width: 48.25%; height: 40px;  /* left(1.75%, of the x-plane as a whole) */
-  background: linear-gradient(to right, pink 96%, transparent);
+  /* background: linear-gradient(to right, pink 96%, transparent); */
+  background: pink;
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
   border-left: 2px solid grey;
@@ -122,13 +126,13 @@ section {
 
 /*======================= The Side Panel =======================  */
 #controlpanel {
-  display: flex; justify-content: top; align-items: center;
-  flex-direction: column;
-  width: 200px; height: 700px;
+  width: 80%;
+  display: flex; justify-content: center;
+  padding: 10px;
 }
 
 #controlpanel button {
-  margin-top: 30px;
+  margin-right: 30px;
   width: 120px; height: 60px;
   background: white;
   border-radius: 20px;
