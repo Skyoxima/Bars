@@ -21,8 +21,8 @@ header {
   margin: 1em;
   text-align: center;
   font-size: 2em;
-  color: rgb(56, 56, 56);
-
+  color: white;
+  text-shadow: 1px 1px 3px grey;
 }
 
 section {
@@ -89,7 +89,7 @@ section {
 #main .x-plane .bar {
   position: relative;
   margin-top: 35px;
-  width: 48.25%; height: 40px;  /* left(1.75%, of the x-plane as a whole) should be subtracted from each width */
+  width: 48.25%; height: 40px;  /* left(1.75%, of the x-plane as a whole) */
   background: linear-gradient(to right, pink 96%, transparent);
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
@@ -99,13 +99,13 @@ section {
 #main .x-plane .bar::before {
   content: var(--bar-number);
   position: absolute;
-  left: -3%; top: 18%;
+  left: -16px; top: 18%;
 }
 
 #main .x-plane .bar::after {
   content: var(--stands-for-text);
   position: absolute;
-  left: 1%; top: 100%;
+  left: 8px; top: 100%;
   font-style: italic;
   color: var(--stands-for-color);
 }
@@ -131,13 +131,14 @@ section {
 #controlpanel button:active {
   scale: 0.90;
 }
+/*======================= The Pop-up Window =======================  */
 
 .blocker {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
   background: rgb(0, 0, 0, 0.2);
-  display: block;
+  display: none;
 }
 
 .blocker .pop-up {
@@ -147,7 +148,7 @@ section {
   transform: translate(-50%, -50%);
   background: white;
   border-radius: 25px;
-  border: 2px solid grey;
+  border: 2px solid white;
   
   /* scale: 0; */
   transition: scale 5s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -172,10 +173,10 @@ section {
 
 .blocker .pop-up input[type=text] {
   outline: none; border: none;
-  padding: 5px;
-  font-size: 20px;
+  padding: 4px;
+  font-size: 18px;
   border-radius: 10px;
-  border-bottom: 2px solid rgb(255, 192, 203);
+  border-bottom: 2px solid #ffc0cb;
   color: grey;
 }
 
