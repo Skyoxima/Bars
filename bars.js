@@ -2,7 +2,7 @@
   xTicks = document.querySelectorAll(".x-ticks");
 
   for(let i = 0; i < xTicks.length; i++) {
-    xTicks[i].style.left = `${1.75 + 9.6 * i}%`;
+    xTicks[i].style.left = `${1.75 + 9.5 * i}%`;
     xTicks[i].style.setProperty("--tick-text", `'${i}'`);
     if(i > 6)
       xTicks[i].style.setProperty("--tick-text-color", "green");
@@ -13,22 +13,26 @@
 
 function yAxisBarNums() {
   barDivs = document.querySelectorAll('.bar');
-  for(let i = 0; i < barDivs.length; i++)
+  for(let i = 0; i < barDivs.length; i++) {
     barDivs[i].style.setProperty("--bar-number", `"${i + 1}"`);
+    if(i >= 9)
+      barDivs[i].style.setProperty("--bar-index-left", "-22px");
+  }
 };
 yAxisBarNums();
 
 (function addBar() {
-  xTicksSpans = document.querySelectorAll('.x-ticks');
-  xPlaneDiv = document.querySelector('.x-plane');
-  addBarBtn = document.getElementById('add-bar-btn');
-  blockerDiv = document.querySelector('.blocker');
-  popUpDiv = document.querySelector('.pop-up');
-  newBarVal = document.getElementById("new-bar-val");
-  newBarLabel = document.getElementById("new-bar-label");
-  newBarColor = document.getElementById("bar-color-picker");
-  popUpSubmitBtn = document.getElementById("pop-up-submit");
-  popUpCancelBtn = document.getElementById("pop-up-cancel");
+  const xTicksSpans = document.querySelectorAll('.x-ticks');
+  const zXTickPsn = xTicksSpans[0].getBoundingClientRect();          // z ~ zero-th
+  const xPlaneDiv = document.querySelector('.bar-plane');
+  const addBarBtn = document.getElementById('add-bar-btn');
+  const blockerDiv = document.querySelector('.blocker');
+  const popUpDiv = document.querySelector('.pop-up');
+  const newBarVal = document.getElementById("new-bar-val");
+  const newBarLabel = document.getElementById("new-bar-label");
+  const newBarColor = document.getElementById("bar-color-picker");
+  const popUpSubmitBtn = document.getElementById("pop-up-submit");
+  const popUpCancelBtn = document.getElementById("pop-up-cancel");
   
   addBarBtn.onclick = () => {
     popUpSubmitBtn.disabled = true;
@@ -52,9 +56,7 @@ yAxisBarNums();
     bar.className = 'bar';
     bar.style.backgroundImage = "linear-gradient(to right, " + newBarColor.value + " 96%, transparent)";  // do NOT supply the ; in CSS
     bar.style.setProperty("--stands-for-text", `"${newBarLabel.value}"`);
-    let newBarNumVal = parseInt(newBarVal.value);
-    let iXTickPsn = xTicksSpans[newBarNumVal].getBoundingClientRect();
-    let zXTickPsn = xTicksSpans[0].getBoundingClientRect();          // z ~ zero-th
+    let iXTickPsn = xTicksSpans[parseInt(newBarVal.value)].getBoundingClientRect();
     bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`
     xPlaneDiv.appendChild(bar);
     yAxisBarNums();
