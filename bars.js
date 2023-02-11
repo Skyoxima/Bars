@@ -24,7 +24,7 @@ yAxisBarNums();
 (function addBar() {
   const xTicksSpans = document.querySelectorAll('.x-ticks');
   const zXTickPsn = xTicksSpans[0].getBoundingClientRect();          // z ~ zero-th
-  const xPlaneDiv = document.querySelector('.bar-plane');
+  const barPlaneDiv = document.querySelector('.bar-plane');
   const addBarBtn = document.getElementById('add-bar-btn');
   const blockerDiv = document.querySelector('.blocker');
   const newBarVal = document.getElementById("new-bar-val");
@@ -56,9 +56,13 @@ yAxisBarNums();
     // bar.style.backgroundImage = "linear-gradient(to right, " + newBarColor.value + " 96%, transparent)";  // do NOT supply the ; in CSS
     bar.style.background = newBarColor.value;
     bar.style.setProperty("--stands-for-text", `"${newBarLabel.value}"`);
+    bar.style.setProperty("--bar-value", parseInt(newBarVal.value));
+    
+    //TODO: adjust bar width on magnifications, i.e make bars response 
+    
     let iXTickPsn = xTicksSpans[parseInt(newBarVal.value)].getBoundingClientRect();
     bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`
-    xPlaneDiv.appendChild(bar);
+    barPlaneDiv.appendChild(bar);
     yAxisBarNums();
     
     newBarVal.value = "";
@@ -71,3 +75,28 @@ yAxisBarNums();
     blockerDiv.style.display = 'none';
   }
 })();
+
+let saveBarsBtn = document.getElementById('save-bars-btn');
+saveBarsBtn.addEventListener("click", (e) => {
+  // e.preventDefault();     // this was preventing the download
+  console.log("Clicked");
+    barDivs = document.querySelectorAll('.bar');
+    obj = { 
+      allBars: [] 
+    };
+
+    for(let i = 0; i < barDivs.length; i++) {
+      obj.allBars.push(
+        {
+          barValue: window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value"),
+          barColor: window.getComputedStyle(barDivs[i]).getPropertyValue("background-color"),
+          barLabel: window.getComputedStyle(barDivs[i]).getPropertyValue('--stands-for-text'),
+        }
+      )
+      console.log(obj.allBars);
+    }
+    const data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj));
+    saveBtn = document.getElementById("save-bars-btn");
+    saveBtn.href = 'data:' + data;
+    saveBtn.download = 'SaveBars.json';
+});

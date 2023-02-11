@@ -27,14 +27,20 @@
             <span class="x-ticks"></span>
           </div>
           <div class="y-axis"></div>
-          <div class="bar-plane"></div>
+          <div class="bar-plane">
+            <div class="bar" style="--bar-value:1"></div>
+            <div class="bar" style="--bar-value:2"></div>
+            <div class="bar" style="--bar-value:3"></div>
+          </div>
         </div>
       </div>
       
       <div id="controlpanel" class="container">
         <button id="add-bar-btn">Add Bar</button>
         <button id="remove-bar-btn" disabled>Remove Bar</button>
-        <button id="save-bars-btn" disabled>Save Bars</button>
+        <button id="remove-all-bar-btn" disabled>Remove All</button>
+        <!-- <button id="save-bars-btn" disabled>Save Bars</button> -->
+        <a href="" id="save-bars-btn" download>Save Bars</a>
         <button id="load-bars-btn" disabled>Load Bars</button>
         <button id="custom-settings" disabled>Settings</button>
       </div>

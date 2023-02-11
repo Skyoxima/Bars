@@ -5,6 +5,7 @@
   --stands-for-text: 'Stands For?';
   --stands-for-color: grey;
   --bar-index-left: -24px;
+  /* --bar-value: 0; */
 }
 
 * {
@@ -97,6 +98,7 @@ section {
 }
 
 #main .bar-plane .bar {
+  --bar-value: 0;
   position: relative;
   margin-top: 25px;
   margin-bottom: 50px;
@@ -131,17 +133,20 @@ section {
   padding: 10px;
 }
 
-#controlpanel button {
+#controlpanel button,
+#controlpanel a {
   margin-right: 30px;
   width: 120px; height: 60px;
+  display: flex; justify-content: center; align-items: center;
   background: white;
   border-radius: 20px;
   border: 1px solid grey;
   font-size: 1.1em;
   transition: scale .5s;
 }
-
-#controlpanel button:active {
+#controlpanel a { text-decoration:  none; color: black;}
+#controlpanel button:active,
+#controlpanel a:active {
   scale: 0.90;
 }
 /*======================= The Pop-up Window =======================  */
