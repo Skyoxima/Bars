@@ -1,3 +1,4 @@
+// <========================================= Forming the X-axis Ticks Functionality =========================================>
 (function CreateXAxisTicks() {
   xTicks = document.querySelectorAll(".x-ticks");
 
@@ -11,20 +12,22 @@
   }
 })();
 
+// <========================================= Indexing the Bars Functionality =========================================>
 function yAxisBarNums() {
   barDivs = document.querySelectorAll('.bar');
   for(let i = 0; i < barDivs.length; i++) {
     barDivs[i].style.setProperty("--bar-number", `"${i + 1}"`);
     if(i >= 9)
-      barDivs[i].style.setProperty("--bar-index-left", "-22px");
+      barDivs[i].style.setProperty("--bar-index-left", "-20px");
   }
 };
 yAxisBarNums();
 
+// <========================================= Adding a Bar Functionality =========================================>
 (function addBar() {
   const xTicksSpans = document.querySelectorAll('.x-ticks');
   const zXTickPsn = xTicksSpans[0].getBoundingClientRect();          // z ~ zero-th
-  const barPlaneDiv = document.querySelector('.bar-plane');
+  const barPlaneDiv = document.querySelector('#bar-plane');
   const addBarBtn = document.getElementById('add-bar-btn');
   const blockerDiv = document.querySelector('.blocker');
   const newBarVal = document.getElementById("new-bar-val");
@@ -53,12 +56,11 @@ yAxisBarNums();
   popUpSubmitBtn.onclick = () => {
     bar = document.createElement('div');
     bar.className = 'bar';
-    // bar.style.backgroundImage = "linear-gradient(to right, " + newBarColor.value + " 96%, transparent)";  // do NOT supply the ; in CSS
     bar.style.background = newBarColor.value;
     bar.style.setProperty("--stands-for-text", `"${newBarLabel.value}"`);
     bar.style.setProperty("--bar-value", parseInt(newBarVal.value));
     
-    //TODO: adjust bar width on magnifications, i.e make bars response 
+    //TODO: adjust bar width on magnifications, i.e make bars responsive
     
     let iXTickPsn = xTicksSpans[parseInt(newBarVal.value)].getBoundingClientRect();
     bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`
@@ -76,10 +78,18 @@ yAxisBarNums();
   }
 })();
 
+
+// <========================================= Removing Bars Functionality =========================================>
+
+// Removing all bars
+const removeAllBars = () => {
+  const barPlane = document.getElementById("bar-plane");
+  barPlane.innerHTML = null;
+}
+
+// <========================================= Saving Functionality =========================================>
 let saveBarsBtn = document.getElementById('save-bars-btn');
-saveBarsBtn.addEventListener("click", (e) => {
-  // e.preventDefault();     // this was preventing the download
-  console.log("Clicked");
+saveBarsBtn.addEventListener("click", () => {
     barDivs = document.querySelectorAll('.bar');
     obj = { 
       allBars: [] 
@@ -93,10 +103,36 @@ saveBarsBtn.addEventListener("click", (e) => {
           barLabel: window.getComputedStyle(barDivs[i]).getPropertyValue('--stands-for-text'),
         }
       )
-      console.log(obj.allBars);
     }
+    // console.log(obj.allBars);
     const data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj));
     saveBtn = document.getElementById("save-bars-btn");
     saveBtn.href = 'data:' + data;
     saveBtn.download = 'SaveBars.json';
 });
+
+// <========================================= Loading Functionality =========================================>
+const loadBarFiles = document.getElementById("load-bars-file");
+// const loadBarsBtn = document.getElementById("load-bars-btn-cover");
+loadBarFiles.onchange = async () => {
+  console.log("Onchange invoked");
+  const loadedBars = await new Response(loadBarFiles.files[0]).json()                       //! understand this line...
+  const xTicksSpans = document.querySelectorAll('.x-ticks');
+  const zXTickPsn = xTicksSpans[0].getBoundingClientRect();
+  const barPlaneDiv = document.querySelector('#bar-plane');
+  removeAllBars();      // clear the screen before loading the uploaded bars
+
+  for(let i = 0; i < loadedBars.allBars.length; i++) {
+    bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.background = loadedBars.allBars[i].barColor;
+    bar.style.setProperty("--stands-for-text", loadedBars.allBars[i].barLabel);
+    bar.style.setProperty("--bar-value", loadedBars.allBars[i].barValue);
+    
+    let iXTickPsn = xTicksSpans[loadedBars.allBars[i].barValue].getBoundingClientRect();
+    bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`
+    barPlaneDiv.appendChild(bar);
+    yAxisBarNums();
+  }
+  loadBarFiles.value = null       // once the file has been read, remove its contents
+}

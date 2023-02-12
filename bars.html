@@ -27,7 +27,7 @@
             <span class="x-ticks"></span>
           </div>
           <div class="y-axis"></div>
-          <div class="bar-plane">
+          <div id="bar-plane">
             <div class="bar" style="--bar-value:1"></div>
             <div class="bar" style="--bar-value:2"></div>
             <div class="bar" style="--bar-value:3"></div>
@@ -38,10 +38,10 @@
       <div id="controlpanel" class="container">
         <button id="add-bar-btn">Add Bar</button>
         <button id="remove-bar-btn" disabled>Remove Bar</button>
-        <button id="remove-all-bar-btn" disabled>Remove All</button>
-        <!-- <button id="save-bars-btn" disabled>Save Bars</button> -->
+        <button id="remove-all-bar-btn" onclick = "removeAllBars()">Remove All</button>
         <a href="" id="save-bars-btn" download>Save Bars</a>
-        <button id="load-bars-btn" disabled>Load Bars</button>
+        <button id="load-bars-btn" onclick="invokeFileUpload()">Load Bars</button>
+        <input type="file" id="load-bars-file" accept=".json"/>
         <button id="custom-settings" disabled>Settings</button>
       </div>
     </section>
@@ -59,11 +59,20 @@
       </div>
     </div>
     <script src="bars.js"></script>
+    <script>
+      function invokeFileUpload() {
+        fileUploadTag = document.getElementById('load-bars-file');
+        console.log(fileUploadTag.files)
+        fileUploadTag.click();        // invokes a click on the almost non-existing file tag, make the upload box appear
+      }
+    </script>
   </body>
 </html>
 
 <!-- Todo 
 Make the bars as range inputs themselves
-animations
-save the current values and add an option to open a saved chart
+y-axis height should be 100% till no overflow then it should be 105%
+animations - seems tough to implement
+-save the current values and 
+add an option to open a saved chart
 -->
