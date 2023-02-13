@@ -12,16 +12,34 @@
   }
 })();
 
+// <========================================= Adjusting the bar width whenever xTicks change =========================================>
+(function adjustBarWidths() {
+  window.addEventListener("resize", () => {
+    const xTicks = document.querySelectorAll(".x-ticks");   // when the zeroth changes so do the others cause percentages have been used
+    const barDivs = document.querySelectorAll(".bar");
+    console.log("Resize Triggered");
+    for(let i = 0; i < barDivs.length; i++) {
+      console.log(xTicks[window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value")].getBoundingClientRect().left - xTicks[0].getBoundingClientRect().left);
+      barDivs[i].style.width = `${xTicks[window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value")].getBoundingClientRect().left - xTicks[0].getBoundingClientRect().left}px`;
+    }
+  });
+})();
+
 // <========================================= Indexing the Bars Functionality =========================================>
-function yAxisBarNums() {
+function yAxisBarIndxAndVal() {
   barDivs = document.querySelectorAll('.bar');
   for(let i = 0; i < barDivs.length; i++) {
+    const barValue = window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value");
     barDivs[i].style.setProperty("--bar-number", `"${i + 1}"`);
+    barDivs[i].innerHTML = `<span>${barValue}</span>`;
+    if(barValue == 10)
+    barDivs[i].firstChild.style.right = "-18px";
+
     if(i >= 9)
       barDivs[i].style.setProperty("--bar-index-left", "-20px");
   }
 };
-yAxisBarNums();
+yAxisBarIndxAndVal();
 
 // <========================================= Adding a Bar Functionality =========================================>
 (function addBar() {
@@ -65,7 +83,7 @@ yAxisBarNums();
     let iXTickPsn = xTicksSpans[parseInt(newBarVal.value)].getBoundingClientRect();
     bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`
     barPlaneDiv.appendChild(bar);
-    yAxisBarNums();
+    yAxisBarIndxAndVal();
     
     newBarVal.value = "";
     newBarLabel.value = "";
@@ -80,6 +98,7 @@ yAxisBarNums();
 
 
 // <========================================= Removing Bars Functionality =========================================>
+// Remove particular bar
 
 // Removing all bars
 const removeAllBars = () => {
@@ -113,14 +132,13 @@ saveBarsBtn.addEventListener("click", () => {
 
 // <========================================= Loading Functionality =========================================>
 const loadBarFiles = document.getElementById("load-bars-file");
-// const loadBarsBtn = document.getElementById("load-bars-btn-cover");
 loadBarFiles.onchange = async () => {
   console.log("Onchange invoked");
-  const loadedBars = await new Response(loadBarFiles.files[0]).json()                       //! understand this line...
+  const loadedBars = await new Response(loadBarFiles.files[0]).json();                       //! understand this line...
   const xTicksSpans = document.querySelectorAll('.x-ticks');
   const zXTickPsn = xTicksSpans[0].getBoundingClientRect();
   const barPlaneDiv = document.querySelector('#bar-plane');
-  removeAllBars();      // clear the screen before loading the uploaded bars
+  removeAllBars();                                                                         // clear the screen before loading the uploaded bars
 
   for(let i = 0; i < loadedBars.allBars.length; i++) {
     bar = document.createElement('div');
@@ -132,7 +150,7 @@ loadBarFiles.onchange = async () => {
     let iXTickPsn = xTicksSpans[loadedBars.allBars[i].barValue].getBoundingClientRect();
     bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`
     barPlaneDiv.appendChild(bar);
-    yAxisBarNums();
+    yAxisBarIndxAndVal();
   }
   loadBarFiles.value = null       // once the file has been read, remove its contents
 }

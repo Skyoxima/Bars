@@ -102,8 +102,7 @@ section {
   position: relative;
   margin-top: 25px;
   margin-bottom: 50px;
-  width: 48.25%; height: 40px;  /* left(1.75%, of the x-plane as a whole) */
-  /* background: linear-gradient(to right, pink 96%, transparent); */
+  width: 48.25%; height: 40px;              /* left(1.75%, of the x-plane as a whole) */
   background: pink;
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
@@ -126,6 +125,13 @@ section {
   color: var(--stands-for-color);
 }
 
+#main #bar-plane .bar span {
+  position: absolute;
+  display: inline-block;
+  top: 50%; right: -12px;
+  translate: 0 -50%;
+}
+
 /*======================= The Side Panel =======================  */
 #controlpanel {
   width: 80%;
@@ -139,18 +145,22 @@ section {
   width: 120px; height: 60px;
   background: white;
   border-radius: 20px;
-  border: 1px solid grey;
+  border: 1px solid white;
   text-align: center;
   font-size: 1.1em;
-  transition: scale .5s;
+  transition: scale, border .5s;
   cursor: pointer;
 }
 
-  
 #controlpanel a { 
   display: flex; justify-content: center; align-items: center;
   text-decoration: none; 
   color: black;  
+}
+
+#controlpanel:hover button, 
+#controlpanel:hover a {
+  border: 1px solid grey;
 }
 
 #controlpanel button:active,
