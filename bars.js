@@ -3,11 +3,11 @@
   xTicks = document.querySelectorAll(".x-ticks");
 
   for(let i = 0; i < xTicks.length; i++) {
-    xTicks[i].style.left = `${1.75 + 9 * i}%`;
-    xTicks[i].style.setProperty("--tick-text", `'${i}'`);
-    if(i > 6)
+    xTicks[i].style.left = `${1.75 + 4.75 * i}%`;
+    xTicks[i].style.setProperty("--tick-text", `'${i / 2}'`);
+    if(i / 2 > 6)
       xTicks[i].style.setProperty("--tick-text-color", "green");
-    else if(i > 3 && i < 7)
+    else if(i / 2 > 3 && i / 2 < 7)
       xTicks[i].style.setProperty("--tick-text-color", "#e3c565");
   }
 })();
@@ -32,8 +32,11 @@ function yAxisBarIndxAndVal() {
     const barValue = window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value");
     barDivs[i].style.setProperty("--bar-number", `"${i + 1}"`);
     barDivs[i].innerHTML = `<span>${barValue}</span>`;
+    if((barValue * 2) % 2 == 1)
+      barDivs[i].firstChild.style.right = "-25px";
+
     if(barValue == 10)
-    barDivs[i].firstChild.style.right = "-18px";
+      barDivs[i].firstChild.style.right = "-18px";
 
     if(i >= 9)
       barDivs[i].style.setProperty("--bar-index-left", "-20px");
@@ -61,14 +64,22 @@ yAxisBarIndxAndVal();
   
   // validation of inputs
   newBarVal.oninput = () => {
-    newBarVal.value = newBarVal.value.replace(/[^0-9]/g, "");     // don't allow any text other than digits
-    if(newBarVal.value === "")                                    // disable the add button for all invalid inputs i.e no value to set to
+    newBarVal.value = newBarVal.value.replace(/[^0-9\.]/g, "");                 // don't allow any text other than digits and decimal
+    if(newBarVal.value === "")                                                  // disable the add button for all invalid inputs i.e no value to set to
       popUpSubmitBtn.disabled = true;
     else {
-      newBarVal.value = newBarVal.value.replace(/1[1-9]+|[2-9][0-9]+|10[\d]+/g, newBarVal.value[0]);
+      newBarVal.value = newBarVal.value.replace(/1[^0]|[2-9]\d|10[0-9]|0[^\.]|^\.|\.[^5]+|\.5.+/g, "");   
       popUpSubmitBtn.disabled = false;
     }
   } 
+
+  // 1[^0] -> 1 should not be followed by anything(number) except 0
+  // [2-9]\d -> 2-9 should not be followed by any number
+  // 10[0-9] -> 10 should not be followed by anything
+  // 0[^\.] -> 0 should not be followed by anything except decimal
+  // ^\. -> . cannot be at the start of the string
+  // \.[^5]+ -> decimal should not be followed by anything except 5
+  // \.5.+ -> .5 should not be followed by anything 
 
   // using the field data to construct the bar
   popUpSubmitBtn.onclick = () => {
@@ -76,11 +87,9 @@ yAxisBarIndxAndVal();
     bar.className = 'bar';
     bar.style.background = newBarColor.value;
     bar.style.setProperty("--stands-for-text", `"${newBarLabel.value}"`);
-    bar.style.setProperty("--bar-value", parseInt(newBarVal.value));
-    
-    //TODO: adjust bar width on magnifications, i.e make bars responsive
-    
-    let iXTickPsn = xTicksSpans[parseInt(newBarVal.value)].getBoundingClientRect();
+    bar.style.setProperty("--bar-value", parseFloat(newBarVal.value));
+
+    let iXTickPsn = xTicksSpans[parseFloat(newBarVal.value) * 2].getBoundingClientRect();         // * 2 adjusts the mid values correctly too
     bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`
     barPlaneDiv.appendChild(bar);
     yAxisBarIndxAndVal();
@@ -154,3 +163,5 @@ loadBarFiles.onchange = async () => {
   }
   loadBarFiles.value = null       // once the file has been read, remove its contents
 }
+
+//Rafe

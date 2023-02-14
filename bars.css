@@ -69,6 +69,7 @@ section {
   border-top: 2px solid grey;
 }
 
+/* JS is used to position the ticks at fixed intervals */
 #main .axes .x-axis .x-ticks {
   position: absolute;
   transform: translate(-30%, -60%);
@@ -81,6 +82,14 @@ section {
   position: absolute;
   translate: 8px -20px;
   color: var(--tick-text-color);
+}
+
+#main .axes .x-axis .x-ticks.half-tick {
+  width: 2px; height: 10px;
+  border-radius: 0;
+}
+#main .axes .x-axis .x-ticks.half-tick::before {
+  content: "";
 }
 
 #main .axes .y-axis {
@@ -148,7 +157,7 @@ section {
   border: 1px solid white;
   text-align: center;
   font-size: 1.1em;
-  transition: scale, border .5s;
+  transition: scale .5s, border .5s;
   cursor: pointer;
 }
 
@@ -178,7 +187,7 @@ section {
   top: 0; left: 0;
   width: 100%; height: 100%;
   background: rgb(0, 0, 0, 0.2);
-  display: none;
+  /* display: none; */
 }
 
 .blocker .pop-up {
