@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="bars.css">
   </head>
 
-  <body>
-    <header>Barkeep - A Bar Chart app</header>
+  <body >
+    <header>Barkeep - A Bar Graph app</header>
     <section>
       <div id="main" class="container">
         <div class="axes">
@@ -38,14 +38,13 @@
           </div>
           <div class="y-axis"></div>
           <div id="bar-plane">
-            <!-- <div class="bar" style="--bar-value:1"><span></span></div> -->
+            <div class="bar" style="--bar-value:1" onclick="trial(event)"><span></span></div>
           </div>
         </div>
       </div>
       
       <div id="controlpanel" class="container">
         <button id="add-bar-btn">Add Bar</button>
-        <button id="remove-bar-btn" disabled>Remove Bar</button>
         <button id="remove-all-bar-btn" onclick = "removeAllBars()">Remove All</button>
         <a href="" id="save-bars-btn" download>Save Bars</a>
         <button id="load-bars-btn" onclick="invokeFileUpload()">Load Bars</button>
@@ -55,35 +54,60 @@
     </section>
 
     <div class="blocker">
-      <div class="pop-up">
+      <div class="pop-up add-bar-pu">
         <p class="header">Add a Bar</p>
-        <div class="pop-up-txt-input"><label for="sf">Bar Label: </label><input type="text" name="sf" id="new-bar-label" /></div>
+        <div class="pop-up-txt-input"><label for="sf">Bar Label:</label><input type="text" name="sf" id="new-bar-label" /></div>
         <div class="pop-up-sub-div">
-          <div class="pop-up-txt-input"><label for="val">Value: </label><input type="text" name="val" id="new-bar-val" /></div>
-          <div class="add-bar-color"><label for="barcolor">Pick Color: </label><input type="color" value="#ffc0cb" name="barcolor" id="bar-color-picker" /></div>
+          <div class="pop-up-txt-input"><label for="val">Value:</label><input type="text" name="val" id="new-bar-val" /></div>
+          <div class="add-bar-color"><label for="barcolor">Pick Color:</label><input type="color" value="#ffc0cb" name="barcolor" id="bar-color-picker" /></div>
         </div>
         <button id="pop-up-submit" disabled>Add!</button>
         <button id="pop-up-cancel">Cancel</button>
       </div>
     </div>
+    <div id="edit-bar-tooltip">
+      <i class="fa-solid fa-trash" id="close-edit"></i>
+      <i class="fa-sharp fa-solid fa-xmark" id="delete-bar"></i>
+    </div>
+    <div id="info-button"></div>    
+    <div class="how-to">
+      <ol type="1">
+        <li>This is a simple bar-graph creation web-app, intended for simple visuals for graphs with many inputs.</li>
+        <li>Use <b>Add Bar</b> to insert a bar on the canvas. The bar can be labelled to your wish using <b>Bar Label</b>, </li>
+      </ol>
+    </div>
+    <script src="https://kit.fontawesome.com/459235f77f.js" crossorigin="anonymous"></script>
     <script src="bars.js"></script>
     <script>
       function invokeFileUpload() {
         fileUploadTag = document.getElementById('load-bars-file');
-        console.log(fileUploadTag.files)
         fileUploadTag.click();        // invokes a click on the almost non-existing file tag, make the upload box appear
       }
+
+      function trial(ev) {
+        const editBarDiv = document.getElementById("edit-bar-tooltip");
+        // null error
+        console.log(ev);
+        editBarDiv.style.left = `${ev.clientX}px`;
+        editBarDiv.style.top = `${ev.clientY}px`;
+        editBarDiv.style.display = "block";
+
+        function handleChanges() {
+
+        }
+      }
+
     </script>
   </body>
 </html>
 
 <!-- Todo 
-Make the bars as range inputs themselves or atleast resizable with snapping
+Make the bars as range inputs themselves or atleast resizable with snapping - too complicated, but try
 y-axis height should be 100% till no overflow then it should be 105%
 animations - seems tough to implement
 -save the current values and 
 -add an option to open a saved chart
 multi-partitions in the bars
-1/2 values
+-1/2 values
 add usage directions at the bottom? (With a hyperlink to lead there at top)
 -->

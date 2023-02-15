@@ -17,10 +17,9 @@
   window.addEventListener("resize", () => {
     const xTicks = document.querySelectorAll(".x-ticks");   // when the zeroth changes so do the others cause percentages have been used
     const barDivs = document.querySelectorAll(".bar");
-    console.log("Resize Triggered");
     for(let i = 0; i < barDivs.length; i++) {
-      console.log(xTicks[window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value")].getBoundingClientRect().left - xTicks[0].getBoundingClientRect().left);
-      barDivs[i].style.width = `${xTicks[window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value")].getBoundingClientRect().left - xTicks[0].getBoundingClientRect().left}px`;
+      barDivs[i].style.width = `${xTicks[window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value") * 2].getBoundingClientRect().left - xTicks[0].getBoundingClientRect().left}px`;
+      //. * 2 makes the value correctly correspond to its index 
     }
   });
 })();
@@ -32,7 +31,8 @@ function yAxisBarIndxAndVal() {
     const barValue = window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value");
     barDivs[i].style.setProperty("--bar-number", `"${i + 1}"`);
     barDivs[i].innerHTML = `<span>${barValue}</span>`;
-    if((barValue * 2) % 2 == 1)
+    
+    if((barValue * 2) % 2 == 1)                                   // if decimal value
       barDivs[i].firstChild.style.right = "-25px";
 
     if(barValue == 10)
@@ -48,9 +48,10 @@ yAxisBarIndxAndVal();
 (function addBar() {
   const xTicksSpans = document.querySelectorAll('.x-ticks');
   const zXTickPsn = xTicksSpans[0].getBoundingClientRect();          // z ~ zero-th
+  const blockerDiv = document.querySelector('.blocker');
+  const addBarPopUp = document.querySelector('.add-bar-pu');
   const barPlaneDiv = document.querySelector('#bar-plane');
   const addBarBtn = document.getElementById('add-bar-btn');
-  const blockerDiv = document.querySelector('.blocker');
   const newBarVal = document.getElementById("new-bar-val");
   const newBarLabel = document.getElementById("new-bar-label");
   const newBarColor = document.getElementById("bar-color-picker");
@@ -59,7 +60,9 @@ yAxisBarIndxAndVal();
   
   addBarBtn.onclick = () => {
     popUpSubmitBtn.disabled = true;
+    addBarPopUp.style.display = 'block'
     blockerDiv.style.display = 'block';
+
   }
   
   // validation of inputs
@@ -72,7 +75,6 @@ yAxisBarIndxAndVal();
       popUpSubmitBtn.disabled = false;
     }
   } 
-
   // 1[^0] -> 1 should not be followed by anything(number) except 0
   // [2-9]\d -> 2-9 should not be followed by any number
   // 10[0-9] -> 10 should not be followed by anything
@@ -81,6 +83,7 @@ yAxisBarIndxAndVal();
   // \.[^5]+ -> decimal should not be followed by anything except 5
   // \.5.+ -> .5 should not be followed by anything 
 
+  
   // using the field data to construct the bar
   popUpSubmitBtn.onclick = () => {
     bar = document.createElement('div');
@@ -90,8 +93,9 @@ yAxisBarIndxAndVal();
     bar.style.setProperty("--bar-value", parseFloat(newBarVal.value));
 
     let iXTickPsn = xTicksSpans[parseFloat(newBarVal.value) * 2].getBoundingClientRect();         // * 2 adjusts the mid values correctly too
-    bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`
+    bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`;
     barPlaneDiv.appendChild(bar);
+    barPlaneDiv.lastChild.addEventListener("click", editBars);
     yAxisBarIndxAndVal();
     
     newBarVal.value = "";
@@ -102,17 +106,25 @@ yAxisBarIndxAndVal();
 
   popUpCancelBtn.onclick = () => {
     blockerDiv.style.display = 'none';
+    addBarPopUp.style.display = 'none';
   }
 })();
 
+// <========================================= Editing Bars Functionality =========================================>
+function editBars(ev) {
+  const editBarDiv = document.getElementById("edit-bar-tooltip");
+  // null error
+
+  editBarDiv.style.left = `${ev.clientX}px`;
+  editBarDiv.style.top = `${ev.clientY}px`;
+  editBarDiv.style.display = "block";
+}
 
 // <========================================= Removing Bars Functionality =========================================>
-// Remove particular bar
-
 // Removing all bars
 const removeAllBars = () => {
-  const barPlane = document.getElementById("bar-plane");
-  barPlane.innerHTML = null;
+  const barPlaneDiv = document.getElementById("bar-plane");
+  barPlaneDiv.innerHTML = null;
 }
 
 // <========================================= Saving Functionality =========================================>
@@ -142,7 +154,6 @@ saveBarsBtn.addEventListener("click", () => {
 // <========================================= Loading Functionality =========================================>
 const loadBarFiles = document.getElementById("load-bars-file");
 loadBarFiles.onchange = async () => {
-  console.log("Onchange invoked");
   const loadedBars = await new Response(loadBarFiles.files[0]).json();                       //! understand this line...
   const xTicksSpans = document.querySelectorAll('.x-ticks');
   const zXTickPsn = xTicksSpans[0].getBoundingClientRect();
@@ -156,12 +167,14 @@ loadBarFiles.onchange = async () => {
     bar.style.setProperty("--stands-for-text", loadedBars.allBars[i].barLabel);
     bar.style.setProperty("--bar-value", loadedBars.allBars[i].barValue);
     
-    let iXTickPsn = xTicksSpans[loadedBars.allBars[i].barValue].getBoundingClientRect();
+    let iXTickPsn = xTicksSpans[loadedBars.allBars[i].barValue * 2].getBoundingClientRect();
     bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`
     barPlaneDiv.appendChild(bar);
+    // adding a listener to divs added from this method, I intended for dblclick but it's not happening on laptop so fellback to click
+    barPlaneDiv.lastChild.addEventListener("click", editBars);
     yAxisBarIndxAndVal();
   }
-  loadBarFiles.value = null       // once the file has been read, remove its contents
+  loadBarFiles.value = null                                                                // once the file has been read, remove its contents
 }
 
 //Rafe
