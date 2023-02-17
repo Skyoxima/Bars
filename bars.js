@@ -15,10 +15,10 @@
 // <========================================= Adjusting the bar width whenever xTicks change =========================================>
 (function adjustBarWidths() {
   window.addEventListener("resize", () => {
-    const xTicks = document.querySelectorAll(".x-ticks");   // when the zeroth changes so do the others cause percentages have been used
-    const barDivs = document.querySelectorAll(".bar");
+    const xTicks = document.querySelectorAll(".x-ticks"),   // when the zeroth changes so do the others cause percentages have been used
+          barDivs = document.querySelectorAll(".bar");
     for(let i = 0; i < barDivs.length; i++) {
-      barDivs[i].style.width = `${xTicks[window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value") * 2].getBoundingClientRect().left - xTicks[0].getBoundingClientRect().left}px`;
+      barDivs[i].style.width = `${xTicks[parseFloat(barDivs[i].getAttribute("bar-value")) * 2].getBoundingClientRect().left - xTicks[0].getBoundingClientRect().left}px`;
       //. * 2 makes the value correctly correspond to its index 
     }
   });
@@ -28,8 +28,8 @@
 function yAxisBarIndxAndVal() {
   barDivs = document.querySelectorAll('.bar');
   for(let i = 0; i < barDivs.length; i++) {
-    const barValue = window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value");
-    barDivs[i].style.setProperty("--bar-number", `"${i + 1}"`);
+    const barValue = parseFloat(barDivs[i].getAttribute("bar-value"));
+    // barDivs[i].style.setProperty("--bar-number", `"${i + 1}"`);
     barDivs[i].innerHTML = `<span>${barValue}</span>`;
     
     if((barValue * 2) % 2 == 1)                                   // if decimal value
@@ -46,17 +46,17 @@ yAxisBarIndxAndVal();
 
 // <========================================= Adding a Bar Functionality =========================================>
 (function addBar() {
-  const xTicksSpans = document.querySelectorAll('.x-ticks');
-  const zXTickPsn = xTicksSpans[0].getBoundingClientRect();          // z ~ zero-th
-  const blockerDiv = document.querySelector('.blocker');
-  const addBarPopUp = document.querySelector('.add-bar-pu');
-  const barPlaneDiv = document.querySelector('#bar-plane');
-  const addBarBtn = document.getElementById('add-bar-btn');
-  const newBarVal = document.getElementById("new-bar-val");
-  const newBarLabel = document.getElementById("new-bar-label");
-  const newBarColor = document.getElementById("bar-color-picker");
-  const popUpSubmitBtn = document.getElementById("pop-up-submit");
-  const popUpCancelBtn = document.getElementById("pop-up-cancel");
+  const xTicksSpans = document.querySelectorAll('.x-ticks'),
+        zXTickPsn = xTicksSpans[0].getBoundingClientRect(),          // z ~ zero-th
+        blockerDiv = document.querySelector('.blocker'),
+        addBarPopUp = document.querySelector('.add-bar-pu'),
+        barPlaneDiv = document.querySelector('#bar-plane'),
+        addBarBtn = document.getElementById('add-bar-btn'),
+        newBarVal = document.getElementById("new-bar-val"),
+        newBarLabel = document.getElementById("new-bar-label"),
+        newBarColor = document.getElementById("bar-color-picker"),
+        popUpSubmitBtn = document.getElementById("pop-up-submit"),
+        popUpCancelBtn = document.getElementById("pop-up-cancel");
   
   addBarBtn.onclick = () => {
     popUpSubmitBtn.disabled = true;
@@ -90,7 +90,8 @@ yAxisBarIndxAndVal();
     bar.className = 'bar';
     bar.style.background = newBarColor.value;
     bar.style.setProperty("--stands-for-text", `"${newBarLabel.value}"`);
-    bar.style.setProperty("--bar-value", parseFloat(newBarVal.value));
+    bar.setAttribute("bar-value", newBarVal.value);
+    bar.setAttribute("bar-number", barPlaneDiv.childElementCount + 1);
 
     let iXTickPsn = xTicksSpans[parseFloat(newBarVal.value) * 2].getBoundingClientRect();         // * 2 adjusts the mid values correctly too
     bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`;
@@ -138,7 +139,7 @@ saveBarsBtn.addEventListener("click", () => {
     for(let i = 0; i < barDivs.length; i++) {
       obj.allBars.push(
         {
-          barValue: window.getComputedStyle(barDivs[i]).getPropertyValue("--bar-value"),
+          barValue: parseFloat(barDivs[i].getAttribute("bar-value")),
           barColor: window.getComputedStyle(barDivs[i]).getPropertyValue("background-color"),
           barLabel: window.getComputedStyle(barDivs[i]).getPropertyValue('--stands-for-text'),
         }
@@ -154,10 +155,10 @@ saveBarsBtn.addEventListener("click", () => {
 // <========================================= Loading Functionality =========================================>
 const loadBarFiles = document.getElementById("load-bars-file");
 loadBarFiles.onchange = async () => {
-  const loadedBars = await new Response(loadBarFiles.files[0]).json();                       //! understand this line...
-  const xTicksSpans = document.querySelectorAll('.x-ticks');
-  const zXTickPsn = xTicksSpans[0].getBoundingClientRect();
-  const barPlaneDiv = document.querySelector('#bar-plane');
+  const loadedBars = await new Response(loadBarFiles.files[0]).json(),                       //! understand this line...
+        xTicksSpans = document.querySelectorAll('.x-ticks'),
+        zXTickPsn = xTicksSpans[0].getBoundingClientRect(),
+        barPlaneDiv = document.querySelector('#bar-plane');
   removeAllBars();                                                                         // clear the screen before loading the uploaded bars
 
   for(let i = 0; i < loadedBars.allBars.length; i++) {
@@ -165,16 +166,16 @@ loadBarFiles.onchange = async () => {
     bar.className = 'bar';
     bar.style.background = loadedBars.allBars[i].barColor;
     bar.style.setProperty("--stands-for-text", loadedBars.allBars[i].barLabel);
-    bar.style.setProperty("--bar-value", loadedBars.allBars[i].barValue);
+    bar.setAttribute("bar-value", loadedBars.allBars[i].barValue);
+    bar.setAttribute("bar-number", barPlaneDiv.childElementCount + 1);
     
     let iXTickPsn = xTicksSpans[loadedBars.allBars[i].barValue * 2].getBoundingClientRect();
     bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`
     barPlaneDiv.appendChild(bar);
+
     // adding a listener to divs added from this method, I intended for dblclick but it's not happening on laptop so fellback to click
     barPlaneDiv.lastChild.addEventListener("click", editBars);
     yAxisBarIndxAndVal();
   }
   loadBarFiles.value = null                                                                // once the file has been read, remove its contents
 }
-
-//Rafe

@@ -1,7 +1,6 @@
 :root {
   --tick-text: '0';
   --tick-text-color: red;
-  --bar-number: '1';
   --stands-for-text: 'Stands For?';
   --stands-for-color: grey;
   --bar-index-left: -24px;
@@ -105,7 +104,6 @@ section {
 }
 
 #main #bar-plane .bar {
-  --bar-value: 0;
   position: relative;
   margin-top: 25px;
   margin-bottom: 50px;
@@ -117,7 +115,7 @@ section {
 }
 
 #main #bar-plane .bar::before {
-  content: var(--bar-number);
+  content: attr(bar-number);
   position: absolute;
   width: 20px;
   left: var(--bar-index-left); top: 18%;

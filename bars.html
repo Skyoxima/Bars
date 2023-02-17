@@ -38,7 +38,8 @@
           </div>
           <div class="y-axis"></div>
           <div id="bar-plane">
-            <div class="bar" style="--bar-value:1" onclick="trial(event)"><span></span></div>
+            <div class="bar" bar-value="1" bar-number="1" onclick="trial(event)"><span></span></div>
+            <!-- TODO - use html attribute instead of css variable to store the value -->
           </div>
         </div>
       </div>
@@ -102,12 +103,10 @@
 </html>
 
 <!-- Todo 
-Make the bars as range inputs themselves or atleast resizable with snapping - too complicated, but try
+Add option to change label color as well, and by default it can either be gray or match the bar color
+Make the bars as range inputs themselves or atleast resizable with snapping - too complicated, but try -> Maybe use onmousemove on the divs, no need for resizes
 y-axis height should be 100% till no overflow then it should be 105%
-animations - seems tough to implement
--save the current values and 
--add an option to open a saved chart
+animations - seems tough to implement -> Use native animate API in JS
 multi-partitions in the bars
--1/2 values
 add usage directions at the bottom? (With a hyperlink to lead there at top)
 -->
