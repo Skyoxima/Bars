@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bars (Bar Chart Application)</title>
+    <title>Barkeep</title>
     <link rel="stylesheet" href="bars.css">
   </head>
 
   <body >
-    <header>Barkeep - A Bar Graph app</header>
+    <header>Barkeep - A Bar Graph Application</header>
     <section>
       <div id="main" class="container">
         <div class="axes">
@@ -39,7 +39,6 @@
           <div class="y-axis"></div>
           <div id="bar-plane">
             <div class="bar" bar-value="1" bar-number="1" onclick="trial(event)"><span></span></div>
-            <!-- TODO - use html attribute instead of css variable to store the value -->
           </div>
         </div>
       </div>
@@ -50,7 +49,7 @@
         <a href="" id="save-bars-btn" download>Save Bars</a>
         <button id="load-bars-btn" onclick="invokeFileUpload()">Load Bars</button>
         <input type="file" id="load-bars-file" accept=".json"/>
-        <button id="custom-settings" disabled>Settings</button>
+        <!-- <button id="custom-settings" disabled>Settings</button> -->
       </div>
     </section>
 
@@ -70,12 +69,16 @@
       <i class="fa-solid fa-trash" id="close-edit"></i>
       <i class="fa-sharp fa-solid fa-xmark" id="delete-bar"></i>
     </div>
-    <div id="info-button"></div>    
-    <div class="how-to">
-      <ol type="1">
-        <li>This is a simple bar-graph creation web-app, intended for simple visuals for graphs with many inputs.</li>
-        <li>Use <b>Add Bar</b> to insert a bar on the canvas. The bar can be labelled to your wish using <b>Bar Label</b>, </li>
-      </ol>
+    <div id="info-button" onclick="unhideInfo(event)"><i class="fa-sharp fa-solid fa-angle-right fa-2x"></i></div>    
+    <div class="info-text">
+      <h2 class="info-title">Instructions</h2>
+      <ul type="disc">
+        <li>This is a bar-graph creation web-app, intended for simple visuals.</li>
+        <li>Use <b>Add Bar</b> to insert a bar on the canvas. Inside the pop-up, the bar can be labelled as per requirement using <b>Bar Label</b>, bar width is set based on <b>Value</b> and a custom color can be selected using the color range in <b>Pick Color</b>.</li>
+        <li><b>Remove All</b> clears the canvas completely (no undo feature yet, use it carefully).</li>
+        <li><b>Save Bars</b> will download the current bars on the canvas as a JSON for further usage.</li>
+        <li><b>Load Bars</b> loads valid JSONs as Bars on the canvas.</li>
+      </ul>
     </div>
     <script src="https://kit.fontawesome.com/459235f77f.js" crossorigin="anonymous"></script>
     <script src="bars.js"></script>
@@ -84,26 +87,17 @@
         fileUploadTag = document.getElementById('load-bars-file');
         fileUploadTag.click();        // invokes a click on the almost non-existing file tag, make the upload box appear
       }
-
-      function trial(ev) {
-        const editBarDiv = document.getElementById("edit-bar-tooltip");
-        // null error
-        console.log(ev);
-        editBarDiv.style.left = `${ev.clientX}px`;
-        editBarDiv.style.top = `${ev.clientY}px`;
-        editBarDiv.style.display = "block";
-
-        function handleChanges() {
-
-        }
+      
+      function unhideInfo(e) {
+        console.log(e);
+        e.target.firstChild.classList.toggle("active");
       }
-
     </script>
   </body>
 </html>
 
 <!-- Todo 
-Add option to change label color as well, and by default it can either be gray or match the bar color
+Add option to change label color as well, and by default it can either be gray or match the bar color, give a checkbox for this
 Make the bars as range inputs themselves or atleast resizable with snapping - too complicated, but try -> Maybe use onmousemove on the divs, no need for resizes
 y-axis height should be 100% till no overflow then it should be 105%
 animations - seems tough to implement -> Use native animate API in JS

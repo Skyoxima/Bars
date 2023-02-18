@@ -8,7 +8,7 @@
     if(i / 2 > 6)
       xTicks[i].style.setProperty("--tick-text-color", "green");
     else if(i / 2 > 3 && i / 2 < 7)
-      xTicks[i].style.setProperty("--tick-text-color", "#e3c565");
+      xTicks[i].style.setProperty("--tick-text-color", "#ffb700");
   }
 })();
 
@@ -29,20 +29,20 @@ function yAxisBarIndxAndVal() {
   barDivs = document.querySelectorAll('.bar');
   for(let i = 0; i < barDivs.length; i++) {
     const barValue = parseFloat(barDivs[i].getAttribute("bar-value"));
-    // barDivs[i].style.setProperty("--bar-number", `"${i + 1}"`);
     barDivs[i].innerHTML = `<span>${barValue}</span>`;
     
+    // adjusting the text representation for the bar width inside the div
     if((barValue * 2) % 2 == 1)                                   // if decimal value
       barDivs[i].firstChild.style.right = "-25px";
 
+    if(i >= 9)
+      barDivs[i].style.setProperty("--bar-index-left", "-20px");
     if(barValue == 10)
       barDivs[i].firstChild.style.right = "-18px";
 
-    if(i >= 9)
-      barDivs[i].style.setProperty("--bar-index-left", "-20px");
   }
 };
-yAxisBarIndxAndVal();
+yAxisBarIndxAndVal();          // for testing, no need to call it on an empty canvas
 
 // <========================================= Adding a Bar Functionality =========================================>
 (function addBar() {
@@ -58,14 +58,14 @@ yAxisBarIndxAndVal();
         popUpSubmitBtn = document.getElementById("pop-up-submit"),
         popUpCancelBtn = document.getElementById("pop-up-cancel");
   
+  // Entering the pop-up by using the button on the Control Panel
   addBarBtn.onclick = () => {
     popUpSubmitBtn.disabled = true;
-    addBarPopUp.style.display = 'block'
+    addBarPopUp.style.display = 'block';
     blockerDiv.style.display = 'block';
-
   }
   
-  // validation of inputs
+  // live validation of inputted values for the new bar
   newBarVal.oninput = () => {
     newBarVal.value = newBarVal.value.replace(/[^0-9\.]/g, "");                 // don't allow any text other than digits and decimal
     if(newBarVal.value === "")                                                  // disable the add button for all invalid inputs i.e no value to set to
@@ -74,7 +74,7 @@ yAxisBarIndxAndVal();
       newBarVal.value = newBarVal.value.replace(/1[^0]|[2-9]\d|10[0-9]|0[^\.]|^\.|\.[^5]+|\.5.+/g, "");   
       popUpSubmitBtn.disabled = false;
     }
-  } 
+  }
   // 1[^0] -> 1 should not be followed by anything(number) except 0
   // [2-9]\d -> 2-9 should not be followed by any number
   // 10[0-9] -> 10 should not be followed by anything
@@ -83,10 +83,9 @@ yAxisBarIndxAndVal();
   // \.[^5]+ -> decimal should not be followed by anything except 5
   // \.5.+ -> .5 should not be followed by anything 
 
-  
-  // using the field data to construct the bar
+  // With the entered data, adding the new bar on the canvas when submit is clicked
   popUpSubmitBtn.onclick = () => {
-    bar = document.createElement('div');
+    let bar = document.createElement('div');
     bar.className = 'bar';
     bar.style.background = newBarColor.value;
     bar.style.setProperty("--stands-for-text", `"${newBarLabel.value}"`);
@@ -96,39 +95,39 @@ yAxisBarIndxAndVal();
     let iXTickPsn = xTicksSpans[parseFloat(newBarVal.value) * 2].getBoundingClientRect();         // * 2 adjusts the mid values correctly too
     bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`;
     barPlaneDiv.appendChild(bar);
-    barPlaneDiv.lastChild.addEventListener("click", editBars);
+    barPlaneDiv.lastChild.addEventListener("click", editBars);      // for editing tool tip
     yAxisBarIndxAndVal();
     
+    // reset the pop-up field before finalising the submit, keeps it ready for next new bars
     newBarVal.value = "";
     newBarLabel.value = "";
     newBarColor.value = "#ffc0cb";
+    addBarPopUp.style.display = 'none';
     blockerDiv.style.display = 'none';
   }
 
   popUpCancelBtn.onclick = () => {
-    blockerDiv.style.display = 'none';
     addBarPopUp.style.display = 'none';
+    blockerDiv.style.display = 'none';
   }
-})();
+})(); //IIFE (Immediately Invoked Function Expression) to have hold of all the necessary elements already and local event handlers for add bar pop-up(pu) buttons and fields
 
-// <========================================= Editing Bars Functionality =========================================>
+// <========================================= Editing Bars (Tooltip) Functionality =========================================>
 function editBars(ev) {
   const editBarDiv = document.getElementById("edit-bar-tooltip");
-  // null error
-
   editBarDiv.style.left = `${ev.clientX}px`;
   editBarDiv.style.top = `${ev.clientY}px`;
   editBarDiv.style.display = "block";
 }
 
-// <========================================= Removing Bars Functionality =========================================>
-// Removing all bars
+// <========================================= Removing All Bars Functionality =========================================>
 const removeAllBars = () => {
   const barPlaneDiv = document.getElementById("bar-plane");
   barPlaneDiv.innerHTML = null;
 }
 
-// <========================================= Saving Functionality =========================================>
+// <========================================= Saving/Downloading Functionality =========================================>
+(function saveBars() {
 let saveBarsBtn = document.getElementById('save-bars-btn');
 saveBarsBtn.addEventListener("click", () => {
     barDivs = document.querySelectorAll('.bar');
@@ -145,12 +144,12 @@ saveBarsBtn.addEventListener("click", () => {
         }
       )
     }
-    // console.log(obj.allBars);
+    
     const data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj));
-    saveBtn = document.getElementById("save-bars-btn");
-    saveBtn.href = 'data:' + data;
-    saveBtn.download = 'SaveBars.json';
+    saveBarsBtn.href = 'data:' + data;
+    saveBarsBtn.download = 'SaveBars.json';
 });
+})();
 
 // <========================================= Loading Functionality =========================================>
 const loadBarFiles = document.getElementById("load-bars-file");
@@ -177,5 +176,5 @@ loadBarFiles.onchange = async () => {
     barPlaneDiv.lastChild.addEventListener("click", editBars);
     yAxisBarIndxAndVal();
   }
-  loadBarFiles.value = null                                                                // once the file has been read, remove its contents
+  loadBarFiles.value = null                                                                // once the file has been read, delete it
 }
