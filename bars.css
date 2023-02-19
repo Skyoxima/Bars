@@ -113,6 +113,7 @@ section {
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
   border-left: 2px solid grey;
+  transition: width 0.5s;
 }
 
 #main #bar-plane .bar::before {

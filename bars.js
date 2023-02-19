@@ -17,9 +17,16 @@
   window.addEventListener("resize", () => {
     const xTicks = document.querySelectorAll(".x-ticks"),   // when the zeroth changes so do the others cause percentages have been used
           barDivs = document.querySelectorAll(".bar");
+    
     for(let i = 0; i < barDivs.length; i++) {
       barDivs[i].style.width = `${xTicks[parseFloat(barDivs[i].getAttribute("bar-value")) * 2].getBoundingClientRect().left - xTicks[0].getBoundingClientRect().left}px`;
-      //. * 2 makes the value correctly correspond to its index 
+      //. * 2 makes the value correctly correspond to its index
+      
+      // keeps the bar index on within the y-axis - offsetLeft gives position relative to the parent which is what I wanted for 0th x-tick
+      if(i < 9)
+        barDivs[i].style.setProperty("--bar-index-left", `${-(xTicks[0].offsetLeft + 5)}px`);
+      if(i >= 9)
+        barDivs[i].style.setProperty("--bar-index-left", `${-(xTicks[0].offsetLeft + 3)}px`);
     }
   });
 })();
@@ -93,8 +100,19 @@ yAxisBarIndxAndVal();          // for testing, no need to call it on an empty ca
     bar.setAttribute("bar-number", barPlaneDiv.childElementCount + 1);
 
     let iXTickPsn = xTicksSpans[parseFloat(newBarVal.value) * 2].getBoundingClientRect();         // * 2 adjusts the mid values correctly too
-    bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`;
+    const barWidth = iXTickPsn.left - zXTickPsn.left;
+    bar.style.width = `${barWidth}px`;
     barPlaneDiv.appendChild(bar);
+    barPlaneDiv.lastChild.animate(
+      [
+        {width: "0px", opacity: 0},
+        {width: `${barWidth}px`, opacity: 1}
+      ], {
+        duration: 1500,
+        iterations: 1,
+        easing: "ease-out"
+      }
+    );
     barPlaneDiv.lastChild.addEventListener("click", editBars);      // for editing tool tip
     yAxisBarIndxAndVal();
     
@@ -169,10 +187,22 @@ loadBarFiles.onchange = async () => {
     bar.setAttribute("bar-number", barPlaneDiv.childElementCount + 1);
     
     let iXTickPsn = xTicksSpans[loadedBars.allBars[i].barValue * 2].getBoundingClientRect();
-    bar.style.width = `${iXTickPsn.left - zXTickPsn.left}px`
+    const barWidth = iXTickPsn.left - zXTickPsn.left;
+    bar.style.width = `${barWidth}px`;
     barPlaneDiv.appendChild(bar);
-
-    // adding a listener to divs added from this method, I intended for dblclick but it's not happening on laptop so fellback to click
+    barPlaneDiv.lastChild.animate(
+      [
+        {width: "0px", opacity: 0},
+        {width: `${barWidth}px`, opacity: 1}
+      ], {
+        duration: 1500,
+        iterations: 1,
+        easing: "ease-out",
+        delay: i * 100,
+        fill: "backwards"
+      }
+      );
+      // adding a listener to divs added from this method, I intended for dblclick but it's not happening on laptop so fellback to click
     barPlaneDiv.lastChild.addEventListener("click", editBars);
     yAxisBarIndxAndVal();
   }
