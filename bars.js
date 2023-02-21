@@ -94,7 +94,7 @@ yAxisBarIndxAndVal();          // for testing, no need to call it on an empty ca
   popUpSubmitBtn.onclick = () => {
     let bar = document.createElement('div');
     bar.className = 'bar';
-    bar.style.background = newBarColor.value;
+    bar.style.background = newBarColor.value === "#ffffff" ? "#FAFAFA" : newBarColor.value;
     bar.style.setProperty("--stands-for-text", `"${newBarLabel.value}"`);
     bar.setAttribute("bar-value", newBarVal.value);
     bar.setAttribute("bar-number", barPlaneDiv.childElementCount + 1);

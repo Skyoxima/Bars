@@ -8,9 +8,20 @@
     <link rel="stylesheet" href="bars.css">
   </head>
 
-  <body >
+  <body>
+    <!-- <div id="info-button-top" class="info-btn" onclick="clickBottomInfo(event)"><i class="fa-solid fa-info fa-2x"></i></div>     -->
     <header>Barkeep - A Bar Graph Application</header>
     <section>
+      <div class="info-text">
+        <h2 class="info-title">Instructions</h2>
+        <ul type="disc">
+          <li>This is a bar-graph creation web-app, intended for simple visuals.</li>
+          <li>Use <b>Add Bar</b> to insert a bar on the canvas. Inside the pop-up, the bar can be labelled as per requirement using <b>Bar Label</b>, bar width is set based on <b>Value</b> and a custom color can be selected using the color range in <b>Pick Color</b>.</li>
+          <li><b>Remove All</b> clears the canvas completely (no undo feature yet, use it carefully).</li>
+          <li><b>Save Bars</b> will download the current bars on the canvas as a JSON for further usage.</li>
+          <li><b>Load Bars</b> loads valid JSONs as Bars on the canvas.</li>
+        </ul>
+      </div>
       <div id="main" class="container">
         <div class="axes">
           <div class="x-axis">
@@ -38,7 +49,7 @@
           </div>
           <div class="y-axis"></div>
           <div id="bar-plane">
-            <div class="bar" bar-value="1" bar-number="1"><span></span></div>
+            <div class="bar" bar-value="1" bar-number="1" onclick="editBars(event)"><span></span></div>
           </div>
         </div>
       </div>
@@ -66,20 +77,15 @@
       </div>
     </div>
     <div id="edit-bar-tooltip">
-      <i class="fa-solid fa-trash" id="close-edit"></i>
-      <i class="fa-sharp fa-solid fa-xmark" id="delete-bar"></i>
+      <i class="fa-sharp fa-solid fa-xmark fa-lg" id="close-edit"></i>
+      <div class="top-sub-div">
+        <input type="color" name="edit-color-swatch" id="edit-color-swatch" value="#f0a8f9"/>
+        <i class="fa-solid fa-trash fa-xl" id="delete-bar"></i>
+      </div>
+      <input type="text" name="change-label" id="change-label" />
     </div>
-    <div id="info-button" onclick="unhideInfo(event)"><i class="fa-sharp fa-solid fa-angle-right fa-2x"></i></div>    
-    <div class="info-text">
-      <h2 class="info-title">Instructions</h2>
-      <ul type="disc">
-        <li>This is a bar-graph creation web-app, intended for simple visuals.</li>
-        <li>Use <b>Add Bar</b> to insert a bar on the canvas. Inside the pop-up, the bar can be labelled as per requirement using <b>Bar Label</b>, bar width is set based on <b>Value</b> and a custom color can be selected using the color range in <b>Pick Color</b>.</li>
-        <li><b>Remove All</b> clears the canvas completely (no undo feature yet, use it carefully).</li>
-        <li><b>Save Bars</b> will download the current bars on the canvas as a JSON for further usage.</li>
-        <li><b>Load Bars</b> loads valid JSONs as Bars on the canvas.</li>
-      </ul>
-    </div>
+    <div id="info-button" class="info-btn" onclick="unhideInfo(event)"><i class="fa-sharp fa-solid fa-info fa-2x"></i></div>    
+
     <script src="https://kit.fontawesome.com/459235f77f.js" crossorigin="anonymous"></script>
     <script src="bars.js"></script>
     <script>
@@ -87,20 +93,31 @@
         fileUploadTag = document.getElementById('load-bars-file');
         fileUploadTag.click();        // invokes a click on the almost non-existing file tag, make the upload box appear
       }
-      
+
       function unhideInfo(e) {
         e.target.firstChild.classList.toggle("active");
-        document.querySelector(".info-text").classList.toggle("active-text");
+        infoTxt = document.querySelector(".info-text");
+        infoTxt.classList.toggle("active-text");
+        if(infoTxt.classList.contains("active-text"))
+          infoTxt.style.height = `${parseFloat(window.getComputedStyle(document.querySelector(".info-text ul")).getPropertyValue("height")) + 40}px`;
+        else
+          infoTxt.style.height = 0;
+      }
+
+      function editBars(ev) {
+        const editBarDiv = document.getElementById("edit-bar-tooltip");
+        editBarDiv.style.left = `${ev.clientX}px`;
+        editBarDiv.style.top = `${ev.clientY}px`;
+        editBarDiv.style.display = "block";
       }
     </script>
   </body>
 </html>
 
 <!-- Todo 
+Custom Title for the Bar graph
 Add option to change label color as well, and by default it can either be gray or match the bar color, give a checkbox for this
 Make the bars as range inputs themselves or atleast resizable with snapping - too complicated, but try -> Maybe use onmousemove on the divs, no need for resizes
-y-axis height should be 100% till no overflow then it should be 105%
-animations - seems tough to implement -> Use native animate API in JS
+re-arrange bars order
 multi-partitions in the bars
-add usage directions at the bottom? (With a hyperlink to lead there at top)
 -->
