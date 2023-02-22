@@ -77,12 +77,16 @@
       </div>
     </div>
     <div id="edit-bar-tooltip">
-      <i class="fa-sharp fa-solid fa-xmark fa-lg" id="close-edit"></i>
-      <div class="top-sub-div">
-        <input type="color" name="edit-color-swatch" id="edit-color-swatch" value="#f0a8f9"/>
-        <i class="fa-solid fa-trash fa-xl" id="delete-bar"></i>
+      <p id="edit-header">Edit Bar</p>
+      <input type="text" name="change-label" id="change-label" placeholder="Change Label"/>
+      <div class="sub-div-1">
+        <input title="Change Color" type="color" name="edit-color-swatch" id="edit-color-swatch" value="#f0a8f9"/>
+        <i title="Delete Bar" class="fa-solid fa-trash fa-lg" id="delete-bar"></i>
       </div>
-      <input type="text" name="change-label" id="change-label" />
+      <div class="sub-div-2">
+        <i title="Confirm Changes" class="fa-solid fa-check fa-lg" id="confirm-edit"></i>
+        <i title="Cancel Changes" class="fa-sharp fa-solid fa-xmark fa-lg" id="close-edit"></i>
+      </div>
     </div>
     <div id="info-button" class="info-btn" onclick="unhideInfo(event)"><i class="fa-sharp fa-solid fa-info fa-2x"></i></div>    
 
@@ -95,6 +99,7 @@
       }
 
       function unhideInfo(e) {
+        document.querySelector("#edit-bar-tooltip").classList.remove("active-tooltip");
         e.target.firstChild.classList.toggle("active");
         infoTxt = document.querySelector(".info-text");
         infoTxt.classList.toggle("active-text");
@@ -103,21 +108,15 @@
         else
           infoTxt.style.height = 0;
       }
-
-      function editBars(ev) {
-        const editBarDiv = document.getElementById("edit-bar-tooltip");
-        editBarDiv.style.left = `${ev.clientX}px`;
-        editBarDiv.style.top = `${ev.clientY}px`;
-        editBarDiv.style.display = "block";
-      }
     </script>
   </body>
 </html>
 
-<!-- Todo 
+<!-- Todo (Possible and probable)
 Custom Title for the Bar graph
+Confirmation for remove all, saving and loading
 Add option to change label color as well, and by default it can either be gray or match the bar color, give a checkbox for this
 Make the bars as range inputs themselves or atleast resizable with snapping - too complicated, but try -> Maybe use onmousemove on the divs, no need for resizes
-re-arrange bars order
-multi-partitions in the bars
+re-arrange bars order - hard
+multi-partitions in the bars, joint bars
 -->

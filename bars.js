@@ -132,10 +132,32 @@ yAxisBarIndxAndVal();          // for testing, no need to call it on an empty ca
 
 // <========================================= Editing Bars (Tooltip) Functionality =========================================>
 function editBars(ev) {
-  const editBarDiv = document.getElementById("edit-bar-tooltip");
+  const editBarDiv = document.getElementById("edit-bar-tooltip"),
+        closeIcon = document.getElementById("close-edit"),
+        confirmIcon = document.getElementById("confirm-edit"),
+        deleteIcon = document.getElementById("delete-bar"),
+        labelChangeTxt = document.getElementById("change-label"),
+        colorInput = document.getElementById("edit-color-swatch");
+  
   editBarDiv.style.left = `${ev.clientX}px`;
   editBarDiv.style.top = `${ev.clientY}px`;
-  editBarDiv.style.display = "block";
+  editBarDiv.classList.add("active-tooltip");
+  
+  deleteIcon.onclick = (e) => {
+    ev.target.remove();
+    editBarDiv.classList.remove("active-tooltip");
+  }
+  
+  confirmIcon.onclick = (e) => {
+    // ev is accessible because of function closure i.e editBars is HOF because of this function
+    ev.target.style.backgroundColor = colorInput.value;
+    ev.target.style.setProperty("--stands-for-text", `"${labelChangeTxt.value}"`);
+    editBarDiv.classList.remove("active-tooltip");
+  }
+
+  closeIcon.onclick = () => {
+    editBarDiv.classList.remove("active-tooltip");
+  }
 }
 
 // <========================================= Removing All Bars Functionality =========================================>
