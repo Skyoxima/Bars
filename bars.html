@@ -9,9 +9,16 @@
   </head>
 
   <body>
-    <!-- <div id="info-button-top" class="info-btn" onclick="clickBottomInfo(event)"><i class="fa-solid fa-info fa-2x"></i></div>     -->
-    <header>Barkeep - A Bar Graph Application</header>
+    <!-- <header>Barkeep - A Bar Graph Application</header> -->
     <section>
+      <div id="landing-container">
+        <p id="landing-title">Barkeep</p>
+        <p id="landing-subtitle">Create your own Bar Graph!</p>
+        <a href="#" id="start-btn" style="--clr: #fafafa;" onclick="scrollToCanvas(event)"><span>Create!</span><i></i></a>
+      </div>
+    </section>
+
+    <section id="canvas-section">
       <div class="info-text">
         <h2 class="info-title">Instructions</h2>
         <ul type="disc">
@@ -22,6 +29,7 @@
           <li><b>Load Bars</b> loads valid JSONs as Bars on the canvas.</li>
         </ul>
       </div>
+
       <div id="main" class="container">
         <div class="axes">
           <div class="x-axis">
@@ -50,6 +58,7 @@
           <div class="y-axis"></div>
           <div id="bar-plane">
             <div class="bar" bar-value="1" bar-number="1" onclick="editBars(event)"><span></span></div>
+            <div id="bar-title"></div>
           </div>
         </div>
       </div>
@@ -78,7 +87,7 @@
     </div>
     <div id="edit-bar-tooltip">
       <p id="edit-header">Edit Bar</p>
-      <input type="text" name="change-label" id="change-label" placeholder="Change Label"/>
+      <input type="text" name="change-label" id="change-label" placeholder="Label (use '-' to clear)"/>
       <div class="sub-div-1">
         <input title="Change Color" type="color" name="edit-color-swatch" id="edit-color-swatch" value="#f0a8f9"/>
         <i title="Delete Bar" class="fa-solid fa-trash fa-lg" id="delete-bar"></i>
@@ -93,6 +102,14 @@
     <script src="https://kit.fontawesome.com/459235f77f.js" crossorigin="anonymous"></script>
     <script src="bars.js"></script>
     <script>
+      function scrollToCanvas(e) {
+        const y = window.innerHeight;
+        window.scroll({
+          top: y,
+          behavior: 'smooth'
+        });
+      }
+
       function invokeFileUpload() {
         fileUploadTag = document.getElementById('load-bars-file');
         fileUploadTag.click();        // invokes a click on the almost non-existing file tag, make the upload box appear

@@ -97,7 +97,7 @@ yAxisBarIndxAndVal();          // for testing, no need to call it on an empty ca
     bar.style.background = newBarColor.value === "#ffffff" ? "#FAFAFA" : newBarColor.value;
     bar.style.setProperty("--stands-for-text", `"${newBarLabel.value}"`);
     bar.setAttribute("bar-value", newBarVal.value);
-    bar.setAttribute("bar-number", barPlaneDiv.childElementCount + 1);
+    bar.setAttribute("bar-number", barPlaneDiv.childElementCount);
 
     let iXTickPsn = xTicksSpans[parseFloat(newBarVal.value) * 2].getBoundingClientRect();         // * 2 adjusts the mid values correctly too
     const barWidth = iXTickPsn.left - zXTickPsn.left;
@@ -144,18 +144,25 @@ function editBars(ev) {
   editBarDiv.classList.add("active-tooltip");
   
   deleteIcon.onclick = (e) => {
-    ev.target.remove();
+    labelChangeTxt.value = ""; 
     editBarDiv.classList.remove("active-tooltip");
+    ev.target.remove();
   }
   
   confirmIcon.onclick = (e) => {
     // ev is accessible because of function closure i.e editBars is HOF because of this function
     ev.target.style.backgroundColor = colorInput.value;
-    ev.target.style.setProperty("--stands-for-text", `"${labelChangeTxt.value}"`);
+    if(labelChangeTxt.value == "-") {
+      ev.target.style.setProperty("--stands-for-text", `""`);
+    } else if(labelChangeTxt.value != "") {
+      ev.target.style.setProperty("--stands-for-text", `"${labelChangeTxt.value}"`);
+    }
+    labelChangeTxt.value = ""; 
     editBarDiv.classList.remove("active-tooltip");
   }
-
+  
   closeIcon.onclick = () => {
+    labelChangeTxt.value = ""; 
     editBarDiv.classList.remove("active-tooltip");
   }
 }
