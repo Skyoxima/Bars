@@ -138,7 +138,7 @@ function editBars(ev) {
         deleteIcon = document.getElementById("delete-bar"),
         labelChangeTxt = document.getElementById("change-label"),
         colorInput = document.getElementById("edit-color-swatch");
-  
+  console.log(ev.clientY);
   editBarDiv.style.left = `${ev.clientX}px`;
   editBarDiv.style.top = `${ev.clientY}px`;
   editBarDiv.classList.add("active-tooltip");
