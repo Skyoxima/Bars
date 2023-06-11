@@ -49,7 +49,7 @@ function yAxisBarIndxAndVal() {
 
   }
 };
-yAxisBarIndxAndVal();          // for testing, no need to call it on an empty canvas
+yAxisBarIndxAndVal();          //! for testing, no need to call it on an empty canvas
 
 // <========================================= Adding a Bar Functionality =========================================>
 (function addBar() {
@@ -67,6 +67,7 @@ yAxisBarIndxAndVal();          // for testing, no need to call it on an empty ca
   
   // Entering the pop-up by using the button on the Control Panel
   addBarBtn.onclick = () => {
+    document.querySelector("#edit-bar-tooltip").classList.remove("active-tooltip");
     popUpSubmitBtn.disabled = true;
     addBarPopUp.style.display = 'block';
     blockerDiv.style.display = 'block';
@@ -74,21 +75,21 @@ yAxisBarIndxAndVal();          // for testing, no need to call it on an empty ca
   
   // live validation of inputted values for the new bar
   newBarVal.oninput = () => {
-    newBarVal.value = newBarVal.value.replace(/[^0-9\.]/g, "");                 // don't allow any text other than digits and decimal
     if(newBarVal.value === "")                                                  // disable the add button for all invalid inputs i.e no value to set to
       popUpSubmitBtn.disabled = true;
     else {
-      newBarVal.value = newBarVal.value.replace(/1[^0]|[2-9]\d|10[0-9]|0[^\.]|^\.|\.[^5]+|\.5.+/g, "");   
+      newBarVal.value = newBarVal.value.replace(/[^0-9\.]|1[^0\.]|[2-9]\d|10.|0[^\.]|^\.|\.[^5]+|\.5.+/g, "");   
       popUpSubmitBtn.disabled = false;
     }
   }
-  // 1[^0] -> 1 should not be followed by anything(number) except 0
-  // [2-9]\d -> 2-9 should not be followed by any number
-  // 10[0-9] -> 10 should not be followed by anything
-  // 0[^\.] -> 0 should not be followed by anything except decimal
-  // ^\. -> . cannot be at the start of the string
-  // \.[^5]+ -> decimal should not be followed by anything except 5
-  // \.5.+ -> .5 should not be followed by anything 
+  // [^0-9\.] → don't allow any text other than digits and decimal
+  // 1[^0\.] → 1 should not be followed by anything(number) except 0 or a decimal point
+  // [2-9]\d → 2-9 should not be followed by any number
+  // 10. → 10 should not be followed by anything
+  // 0[^\.] → 0 should not be followed by anything except decimal
+  // ^\. → . cannot be at the start of the string
+  // \.[^5]+ → decimal should not be followed by anything except 5 (5 can be only once)
+  // \.5.+ → .5 should not be followed by anything 
 
   // With the entered data, adding the new bar on the canvas when submit is clicked
   popUpSubmitBtn.onclick = () => {
@@ -138,9 +139,9 @@ function editBars(ev) {
         deleteIcon = document.getElementById("delete-bar"),
         labelChangeTxt = document.getElementById("change-label"),
         colorInput = document.getElementById("edit-color-swatch");
-  console.log(ev.clientY);
-  editBarDiv.style.left = `${ev.clientX}px`;
-  editBarDiv.style.top = `${ev.clientY}px`;
+
+  editBarDiv.style.left = `${ev.pageX}px`;      //! have to consider the whole page
+  editBarDiv.style.top = `${ev.pageY}px`;
   editBarDiv.classList.add("active-tooltip");
   
   deleteIcon.onclick = (e) => {

@@ -9,7 +9,6 @@
   </head>
 
   <body>
-    <!-- <header>Barkeep - A Bar Graph Application</header> -->
     <section>
       <div id="landing-container">
         <p id="landing-title">Barkeep</p>
@@ -70,10 +69,10 @@
           <div class="y-axis"></div>
           <div id="bar-plane">
             <div class="bar" bar-value="1" bar-number="1" onclick="editBars(event)"><span></span></div>
-            <div id="bar-title"></div>
           </div>
         </div>
       </div>
+      <div id="bar-title"></div>
       
       <div id="controlpanel" class="container">
         <button id="add-bar-btn">Add Bar</button>
@@ -97,6 +96,7 @@
         <button id="pop-up-cancel">Cancel</button>
       </div>
     </div>
+    
     <div id="edit-bar-tooltip">
       <p id="edit-header">Edit Bar</p>
       <input type="text" name="change-label" id="change-label" placeholder="Label (use '-' to clear)"/>
@@ -109,6 +109,7 @@
         <i title="Cancel Changes" class="fa-sharp fa-solid fa-xmark fa-lg" id="close-edit"></i>
       </div>
     </div>
+
     <div id="info-button" class="info-btn" onclick="unhideInfo(event)"><i class="fa-sharp fa-solid fa-info fa-2x"></i></div>    
 
     <script src="https://kit.fontawesome.com/459235f77f.js" crossorigin="anonymous"></script>
