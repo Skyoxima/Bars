@@ -1,0 +1,175 @@
+#board-section {
+  max-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 25px;
+  border: 2px solid white;
+  transition: background .5s, box-shadow .5s;
+  box-shadow: 0 2px 5px 0px rgb(0, 0, 0, 0.35);
+}
+
+.container:hover {
+  background: white;
+  box-shadow: 0 2px 5px 0px rgb(0, 0, 0, 0.45);
+}
+
+#board {
+  position: relative;
+  width: 60%; height: 700px;
+  /* mentioning height to be 700px is what enables me to handle the overflow, otherwise the div would've simply expanded */
+  overflow: hidden;
+  z-index: 1;
+  overflow-y: scroll;
+}
+
+#board::-webkit-scrollbar {
+  display: none;
+}
+
+#board .axes {
+  position: relative;
+  width: 100%; min-height: 100%;
+}
+
+#board .axes .x-axis {
+  position: relative;
+  width: 100%; height: 2px;
+  top: 20px;
+  border-top: 2px solid grey;
+}
+
+/* JS is used to position the ticks at fixed intervals */
+#board .axes .x-axis .x-ticks {
+  position: absolute;
+  transform: translate(-30%, -60%);
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: grey;
+}
+#board .axes .x-axis .x-ticks::before {
+  content: var(--tick-text);
+  position: absolute;
+  translate: 8px -20px;
+  color: var(--tick-text-color);
+}
+
+#board .axes .x-axis .x-ticks.half-tick {
+  width: 2px; height: 10px;
+  border-radius: 0;
+}
+#board .axes .x-axis .x-ticks.half-tick::before {
+  content: "";
+}
+
+#board .axes .y-axis {
+  position: absolute;
+  left: 1.75%;
+  width: 2px; min-height: 100%;
+  border-left: 2px solid grey;
+}
+
+#board #bar-plane {
+  position: relative;
+  width: 100%; height: 100%;
+  top: 20px; left: 1.75%;
+}
+
+#board #bar-plane .bar {
+  position: relative;
+  margin-top: 25px;
+  margin-bottom: 50px;
+  width: 48.25%; height: 40px;              /* left(1.75%, of the x-plane as a whole) */
+  background: pink;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-left: 2px solid grey;
+  transition: width 0.5s, background-color 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+  box-shadow: 0 2px 2px 0 rgb(0, 0, 0, 0.2);
+}
+
+#board #bar-plane .bar::before {
+  content: attr(bar-number);
+  position: absolute;
+  width: 20px;
+  left: var(--bar-number-left); top: 18%;
+  display: flex; justify-content: center; align-items: center;
+}
+
+#board #bar-plane .bar::after {
+  content: var(--stands-for-text);
+  position: absolute;
+  left: 8px; top: 100%;
+  font-style: italic;
+  color: var(--stands-for-color);
+}
+
+#board #bar-plane .bar span {
+  position: absolute;
+  top: 50%; right: -1rem;
+  translate: 0 -50%;
+}
+
+/* [Board Title] ======================================================== */
+#board-title-div {
+  position: relative;
+  width: 325px; height: 40px;
+  
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 5px 0px rgb(0, 0, 0, 0.35);
+  border: 2px solid white;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  
+  overflow: hidden;
+  z-index: 0;
+  transition: background .5s, box-shadow .5s;
+}
+
+#board-title-div:hover {
+  background: white;
+  box-shadow: 0 2px 5px 0px rgb(0, 0, 0, 0.45);
+}
+
+#board-title-div::before {
+  content: '';
+  position: absolute;
+  left: -8.75px; top: 0;
+  width: 7px; height: 7px;
+  border-radius: 0 20px 0 0;
+  box-shadow: 2px -2px 0 white;
+  background: transparent;
+}
+
+/*! For outward curved corners! */
+#board-title-div::after {
+  content: '';
+  position: absolute;
+  right: -8.75px; top: 0;
+  width: 7px; height: 7px;
+  border-radius: 20px 0 0 0;
+  box-shadow: -2px -2px 0 white;
+  background: transparent;
+}
+
+#board-title-div #board-title {
+  position: absolute;
+  top: 50%; left: 50%;
+  /* translate: -50% -50%; */
+  transform: translate(-50%, -50%);
+  outline: none;
+  
+  white-space: nowrap;
+}
+
+#board-title-div #board-title:focus {
+  padding: 1px 5px;
+  border-bottom: 1px solid black;
+  border-radius: 10px;
+}

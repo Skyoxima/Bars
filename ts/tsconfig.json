@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["DOM", "ES2022"],
+    "module": "ES2022",
+    "outDir": "../js",
+    "rootDir": "../ts" 
+  }
+}

@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+/* Other CSS' */
+@import "./board.css";
+@import "./controls.css";
+@import "./edit-tooltip.css";
+@import "./info-dropdown.css";
+@import "./landing.css";
+@import "./pop-up.css";
+@import "./scrollbar.css";
+
+:root {
+  --tick-text: '0';
+  --tick-text-color: rgb(206, 0, 0);
+  --stands-for-text: 'Stands For?';
+  --stands-for-color: grey;
+  --bar-number-left: -24px;
+}
+
+* {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(45deg, rgb(183, 228, 255), pink);
+}

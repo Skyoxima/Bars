@@ -1,0 +1,20 @@
+/* [custom scrollbar] ========  */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-track {
+  background: black;
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: white;
+  box-shadow: inset 1px 1px 4px black, inset -1px -1px 4px white;
+  border-radius: 1rem;
+}
